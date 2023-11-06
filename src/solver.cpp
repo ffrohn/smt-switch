@@ -178,4 +178,9 @@ Result AbsSmtSolver::get_sequence_interpolants(const TermVec & formulae,
   }
 }
 
+UnorderedTermMap AbsSmtSolver::get_model() const {
+  throw NotImplementedException(
+      "get_model not implemented by default");
+}
+
 }  // namespace smt

@@ -71,7 +71,7 @@ using namespace std;
 %token <std::string> QUOTESTRING
 %token SETLOGIC SETOPT SETINFO DECLARECONST DECLAREFUN
        DECLARESORT DEFINEFUN DEFINESORT ASSERT CHECKSAT
-       CHECKSATASSUMING PUSH POP EXIT GETVALUE
+       CHECKSATASSUMING PUSH POP EXIT GETVALUE GETMODEL
        GETUNSATASSUMP ECHO
 %token ASCONST LET
 %token <std::string> KEYWORD
@@ -219,6 +219,15 @@ command:
     }
     cout << ")" << endl;
     delete $4;
+  }
+  | LP GETMODEL RP
+  {
+    cout << "(" << endl;
+    for (const auto &[x,val] : drv.solver()->get_model())
+    {
+      cout << "(define-fun " << x << " () " << x->get_sort() << " " << val << ")" << endl;
+    }
+    cout << ")" << endl;
   }
   | LP GETUNSATASSUMP RP
   {

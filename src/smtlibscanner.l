@@ -67,6 +67,7 @@ push                  { return smtlib::parser::make_PUSH(loc); }
 pop                   { return smtlib::parser::make_POP(loc); }
 exit                  { return smtlib::parser::make_EXIT(loc); }
 get-value[ \t\r]*     { return smtlib::parser::make_GETVALUE(loc); }
+get-model             { return smtlib::parser::make_GETMODEL(loc); }
 get-unsat-assumptions { return smtlib::parser::make_GETUNSATASSUMP(loc); }
 echo                  { return smtlib::parser::make_ECHO(loc); }
 

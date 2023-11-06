@@ -102,6 +102,8 @@ class AbsSmtSolver
    */
   virtual Term get_value(const Term & t) const = 0;
 
+  virtual UnorderedTermMap get_model() const;
+
   /* Get a map of index-value pairs for an array term after check_sat returns
    * sat
    * SMTLIB: (get-value (<t>))
