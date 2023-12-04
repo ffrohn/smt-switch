@@ -95,7 +95,7 @@ GenericSolver::GenericSolver(string path,
         "Generic Solvers require a buffer size of at least 2 and at most 256.");
     throw IncorrectUsageException(msg);
   }
-  term_counter = new uint;
+  term_counter = new unsigned int;
   //allocate memory for the buffers
   write_buf = new char[write_buf_size];
   read_buf = new char[read_buf_size];
