@@ -38,8 +38,8 @@ class GenericSolver : public AbsSmtSolver
  public:
   GenericSolver(std::string path,
                 std::vector<std::string> cmd_line_args,
-                unsinged int write_buf_size = 256,
-                unsinged int read_buf_size = 256);
+                unsigned int write_buf_size = 256,
+                unsigned int read_buf_size = 256);
   ~GenericSolver();
 
   /***************************************************************/
