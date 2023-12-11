@@ -194,11 +194,17 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
     {
       slv.set(o, v);
     }
-    catch (z3::exception &)
+    catch (z3::exception &e)
     {
       std::string msg("Option - ");
       msg += option;
       msg += " - not implemented for Z3 backend.";
+      const std::string what{e.what()};
+      if (!what.empty()) {
+        msg += " (Got ";
+        msg += what;
+        msg += " from Z3)";
+      }
       throw NotImplementedException(msg.c_str());
     }
   }
