@@ -107,15 +107,6 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
   const char * o = option.c_str();
   const char * v = value.c_str();
 
-  // READ PLEASE
-  // The easiest handling of Z3's set function's param requirements is to have
-  // vectors with the names of different options in the list correspoinding with
-  // which param the z3 api expects, it's worth discussing what options we think
-  // should go in these lists to start and obviously it is very easy to add more
-  // down the line
-  unordered_set<string> bool_opts = { "produce-proofs" };
-  unordered_set<string> int_opts = {};
-
   if (option == "incremental")
   {
     if (value == "false")
@@ -161,51 +152,39 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
           "produce-unsat-assumptions takes values true or false");
     }
   }
-  else if (bool_opts.find(option) != bool_opts.end())
+  else if (value == "true")
   {
-    if (value == "true")
-    {
-      slv.set(o, true);
-    }
-    else if (value == "false")
-    {
-      slv.set(o, false);
-    }
-    else
-    {
-      throw IncorrectUsageException("Expected a boolean value.");
-    }
+    slv.set(o, true);
   }
-  else if (int_opts.find(option) != int_opts.end())
+  else if (value == "false")
+  {
+    slv.set(o, false);
+  }
+  else
   {
     try
     {
       double num = stoi(value, nullptr, 10);
       slv.set(o, num);
     }
-    catch (z3::exception & err)
+    catch (const std::invalid_argument&)
     {
-      throw IncorrectUsageException("Expected an integer value.");
-    }
-  }
-  else
-  {
-    try
-    {
-      slv.set(o, v);
-    }
-    catch (z3::exception &e)
-    {
-      std::string msg("Option - ");
-      msg += option;
-      msg += " - not implemented for Z3 backend.";
-      const std::string what{e.what()};
-      if (!what.empty()) {
-        msg += " (Got ";
-        msg += what;
-        msg += " from Z3)";
+      try
+      {
+        slv.set(o, v);
       }
-      throw NotImplementedException(msg.c_str());
+      catch (z3::exception &e)
+      {
+        std::string msg("Option - ");
+        msg += option;
+        msg += " - not implemented for Z3 backend.";
+        const std::string what{e.what()};
+        if (!what.empty()) {
+          msg += " Z3 error:\n";
+          msg += what;
+        }
+        throw NotImplementedException(msg.c_str());
+      }
     }
   }
 }
