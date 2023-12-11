@@ -164,7 +164,7 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
   {
     try
     {
-      double num = stoi(value, nullptr, 10);
+      const auto num = stoi(value);
       slv.set(o, num);
     }
     catch (const std::invalid_argument&)
