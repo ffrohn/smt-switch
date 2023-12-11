@@ -114,7 +114,6 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
   // should go in these lists to start and obviously it is very easy to add more
   // down the line
   unordered_set<string> bool_opts = { "produce-proofs" };
-  unordered_set<string> string_opts = {};
   unordered_set<string> int_opts = {};
 
   if (option == "incremental")
@@ -177,10 +176,6 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
       throw IncorrectUsageException("Expected a boolean value.");
     }
   }
-  else if (string_opts.find(option) != string_opts.end())
-  {
-    slv.set(o, v);
-  }
   else if (int_opts.find(option) != int_opts.end())
   {
     try
@@ -195,10 +190,17 @@ void Z3Solver::set_opt(const std::string option, const std::string value)
   }
   else
   {
-    std::string msg("Option - ");
-    msg += option;
-    msg += " - not implemented for Z3 backend.";
-    throw NotImplementedException(msg.c_str());
+    try
+    {
+      slv.set(o, v);
+    }
+    catch (z3::exception &)
+    {
+      std::string msg("Option - ");
+      msg += option;
+      msg += " - not implemented for Z3 backend.";
+      throw NotImplementedException(msg.c_str());
+    }
   }
 }
 
